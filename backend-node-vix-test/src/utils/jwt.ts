@@ -1,16 +1,26 @@
 import jwt, { TokenExpiredError } from "jsonwebtoken";
-// import { AppError } from "../errors/AppError";
 
-const secret = process.env.JWT_SECRET;
+const secret = process.env.JWT_SECRET as string;
 
-interface IPayload {}
+export interface IPayload {
+  id: string;
+  role: string;
+}
 
-export const genToken = (payload: IPayload) => {};
+export const genToken = (payload: IPayload): string => {
+  return jwt.sign(payload, secret, {
+    expiresIn: "1d",
+  });
+};
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string): IPayload | null => {
   try {
-    return; // data;
+    const data = jwt.verify(token, secret) as IPayload;
+    return data;
   } catch (error) {
-    // throws new AppError(ERROR_MESSAGE.INVALID_TOKEN, STATUS_CODE.UNAUTHORIZED);
+    if (error instanceof TokenExpiredError) {
+      return null;
+    }
+    return null;
   }
 };
