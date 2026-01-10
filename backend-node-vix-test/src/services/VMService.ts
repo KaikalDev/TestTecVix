@@ -26,10 +26,15 @@ export class VMService {
   async createNewVM(data: unknown, user: user) {
     const validateData = vMCreatedSchema.parse(data);
 
-    const createdVM = await this.vMModel.createNewVM({
+    const preparedData = {
       ...validateData,
-      status: "RUNNING",
-    });
+      idBrandMaster: validateData.idBrandMaster ?? undefined,
+      vmName: validateData.vmName ?? undefined,
+      os: validateData.os ?? undefined,
+      status: "RUNNING" as const,
+    };
+
+    const createdVM = await this.vMModel.createNewVM(preparedData);
 
     return createdVM;
   }

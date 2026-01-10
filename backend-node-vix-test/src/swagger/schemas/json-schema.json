@@ -224,10 +224,14 @@
           "type": "integer"
         },
         "pass": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "location": {
           "type": "string",
+          "default": "bre_barueri",
           "enum": [
             "bre_barueri",
             "usa_miami"
