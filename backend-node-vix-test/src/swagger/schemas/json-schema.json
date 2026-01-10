@@ -223,6 +223,16 @@
         "disk": {
           "type": "integer"
         },
+        "pass": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string",
+          "enum": [
+            "bre_barueri",
+            "usa_miami"
+          ]
+        },
         "hasBackup": {
           "type": [
             "boolean",

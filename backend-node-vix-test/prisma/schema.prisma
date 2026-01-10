@@ -57,6 +57,8 @@ model vM {
   vCPU          Int
   ram           Int
   disk          Int
+  pass          String
+  location      ETaskLocation
   hasBackup     Boolean?     @default(false)
   idBrandMaster Int?
   status        EVMStatus?
@@ -99,6 +101,11 @@ enum EVMStatus {
   RUNNING
   STOPPED
   PAUSED
+}
+
+enum ETaskLocation {
+  bre_barueri
+  usa_miami
 }
 
 enum ERole {
