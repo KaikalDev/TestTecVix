@@ -12,6 +12,12 @@ export class UserController {
     return res.status(STATUS_CODE.OK).json(result);
   }
 
+  async getNewToken(req: CustomRequest<unknown>, res: Response) {
+    const { idUser } = req.params;
+    const result = await this.userService.getNewToken(idUser);
+    return res.status(STATUS_CODE.OK).json(result);
+  }
+
   async login(req: CustomRequest<unknown>, res: Response) {
     const { email, password } = req.body as {
       email: string;

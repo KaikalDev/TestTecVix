@@ -20,6 +20,22 @@ export class UserService {
     return user;
   }
 
+  async getNewToken(idUser: string) {
+    const user = await this.userModel.findById(idUser);
+
+    if (!user) {
+      throw new AppError(ERROR_MESSAGE.UNAUTHORIZED, STATUS_CODE.UNAUTHORIZED);
+    }
+
+    if (!user.isActive) {
+      throw new AppError(ERROR_MESSAGE.UNAUTHORIZED, STATUS_CODE.FORBIDDEN);
+    }
+
+    const token = genToken({ id: user.idUser, role: user.role });
+
+    return { token };
+  }
+
   async login(email: string, password: string) {
     const user = await this.userModel.findByEmail(email);
 
