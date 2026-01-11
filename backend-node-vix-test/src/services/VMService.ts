@@ -6,6 +6,7 @@ import { ERROR_MESSAGE } from "../constants/erroMessages";
 import { STATUS_CODE } from "../constants/statusCode";
 import { TVMUpdate, vMUpdatedSchema } from "../types/validations/VM/updateVM";
 import { vmListAllSchema } from "../types/validations/VM/vmListAll";
+import bcrypt from "bcryptjs";
 
 export class VMService {
   constructor() {}
@@ -26,12 +27,15 @@ export class VMService {
   async createNewVM(data: unknown, user: user) {
     const validateData = vMCreatedSchema.parse(data);
 
+    const hashed = await bcrypt.hash(validateData.pass, 10);
+
     const preparedData = {
       ...validateData,
       idBrandMaster: validateData.idBrandMaster ?? undefined,
       vmName: validateData.vmName ?? undefined,
       os: validateData.os ?? undefined,
       status: "RUNNING" as const,
+      pass: hashed,
     };
 
     const createdVM = await this.vMModel.createNewVM(preparedData);

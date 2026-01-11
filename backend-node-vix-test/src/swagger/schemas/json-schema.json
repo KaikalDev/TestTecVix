@@ -229,7 +229,7 @@
             "null"
           ]
         },
-        "location": {
+        "vmLocalization": {
           "type": "string",
           "default": "bre_barueri",
           "enum": [

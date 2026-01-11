@@ -1,4 +1,4 @@
-import { nullable, z } from "zod";
+import { z } from "zod";
 
 const EVMStatus = z.enum(["RUNNING", "STOPPED", "PAUSED"]);
 const ETaskLocation = z.enum(["bre_barueri", "usa_miami"]);
@@ -19,7 +19,7 @@ export const vMCreatedSchema = z.object({
   pass: z.string(),
   hasBackup: z.boolean().optional().default(false),
   idBrandMaster: z.number().nullable().optional(),
-  location: ETaskLocation,
+  vmLocalization: ETaskLocation,
   status: EVMStatus.optional(),
   os: z.string().optional(),
 });

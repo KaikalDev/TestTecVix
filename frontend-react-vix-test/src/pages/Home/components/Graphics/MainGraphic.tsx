@@ -33,7 +33,7 @@ export const MainGraphic = () => {
     if (!metrics) return;
 
     setChartData((prev) => {
-      const next = [...prev, metrics.memory];
+      const next = [...prev, metrics.cpu];
 
       if (next.length > 30) {
         return next.slice(next.length - 30);
