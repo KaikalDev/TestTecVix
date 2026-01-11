@@ -6,6 +6,7 @@ import { ERROR_MESSAGE } from "../constants/erroMessages";
 import { STATUS_CODE } from "../constants/statusCode";
 import { TVMUpdate, vMUpdatedSchema } from "../types/validations/VM/updateVM";
 import { vmListAllSchema } from "../types/validations/VM/vmListAll";
+import { decrypt, encrypt } from "../utils/crypto";
 
 export class VMService {
   constructor() {}
@@ -18,18 +19,39 @@ export class VMService {
 
   async listAll(query: unknown, user: user) {
     const validQuery = vmListAllSchema.parse(query);
-    return this.vMModel.listAll({
+
+    const listVm = await this.vMModel.listAll({
       query: validQuery,
+      idBrandMaster:
+        user.idBrandMaster || Number(validQuery.idBrandMaster) || undefined,
     });
+
+    const canSeePassword = user.role !== "member";
+
+    return {
+      ...listVm,
+      result: listVm.result.map((vm) => ({
+        ...vm,
+        pass: canSeePassword ? decrypt(vm.pass || "") : vm.pass,
+      })),
+    };
   }
 
   async createNewVM(data: unknown, user: user) {
     const validateData = vMCreatedSchema.parse(data);
 
-    const createdVM = await this.vMModel.createNewVM({
+    const hashed = encrypt(validateData.pass || "");
+
+    const preparedData = {
       ...validateData,
-      status: "RUNNING",
-    });
+      idBrandMaster: validateData.idBrandMaster ?? undefined,
+      vmName: validateData.vmName ?? undefined,
+      os: validateData.os ?? undefined,
+      status: "RUNNING" as const,
+      pass: hashed,
+    };
+
+    const createdVM = await this.vMModel.createNewVM(preparedData);
 
     return createdVM;
   }
@@ -42,8 +64,14 @@ export class VMService {
       throw new AppError(ERROR_MESSAGE.NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
 
-    const updatedVM = await this.vMModel.updateVM(idVM, validateDataSchema);
-    return updatedVM;
+    if (validateDataSchema.pass) {
+      validateDataSchema.pass = encrypt(validateDataSchema.pass);
+    }
+
+    return this.vMModel.updateVM(idVM, {
+      ...validateDataSchema,
+      idBrandMaster: oldVM.idBrandMaster,
+    });
   }
 
   async deleteVM(idVM: number, user: user) {
