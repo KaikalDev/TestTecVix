@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { VMController } from "../controllers/VMController";
 import { API_VERSION, ROOT_PATH } from "../constants/basePathRoutes";
+import { authUser } from "../auth/authUser";
 // import { isManagerOrIsAdmin } from "../authUser/isManagerOrIsAdmin";
 // import { isAdmin } from "../authUser/isAdmin";
 // import { authUser } from "../auth/authUser";
@@ -16,13 +17,9 @@ export const makeVMController = () => {
 const vMController = makeVMController();
 
 // ========= GETs =========
-vMRoutes.get(
-  BASE_PATH,
-  // authUser,
-  async (req, res) => {
-    await vMController.listAll(req, res);
-  },
-);
+vMRoutes.get(BASE_PATH, authUser, async (req, res) => {
+  await vMController.listAll(req, res);
+});
 
 vMRoutes.get(
   `${BASE_PATH}/:idVM`, // authUser,

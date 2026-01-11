@@ -12,6 +12,7 @@ import { api } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { IListAll } from "../../../types/ListAllTypes";
 import { TrashIcon } from "../../../icons/TrashIcon";
+import { useListVms } from "../../../hooks/useListVms";
 
 export const Header = () => {
   const { t } = useTranslation();
@@ -200,10 +201,10 @@ export const Header = () => {
           value={
             selectedMSP
               ? {
-                id: selectedMSP.idBrandMaster,
-                label: selectedMSP.brandName,
-                value: selectedMSP,
-              }
+                  id: selectedMSP.idBrandMaster,
+                  label: selectedMSP.brandName,
+                  value: selectedMSP,
+                }
               : null
           }
           sxContainer={{
@@ -235,3 +236,4 @@ export const Header = () => {
     </Stack>
   );
 };
+
