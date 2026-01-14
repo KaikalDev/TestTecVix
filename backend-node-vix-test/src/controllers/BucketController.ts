@@ -24,15 +24,25 @@ export class BucketController {
 
   async uploadFile(req: CustomRequest<unknown>, res: Response) {
     const file = req.file;
-    if (!file)
-      return res
-        .status(STATUS_CODE.BAD_REQUEST)
-        .send({ message: "No file uploaded" });
+
+    // fallback defensivo
+    if (!file && req.body?.file) {
+      return res.status(400).json({
+        message: "Arquivo veio como JSON. Envie binário no multipart.",
+      });
+    }
+
+    if (!file) {
+      console.log("headers:", req.headers["content-type"]);
+      console.log("body:", req.body);
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
     const response = await this.bucketService.uploadFile(
       process.env.MINIO_BUCKET as string,
       file,
     );
 
-    return res.status(STATUS_CODE.OK).json(response);
+    return res.status(200).json(response);
   }
 }

@@ -1,4 +1,4 @@
-import { Box, Modal, Stack } from "@mui/material";
+import { Box, Button, Input, Modal, Stack } from "@mui/material";
 import { ScreenFullPage } from "../../components/ScreenFullPage";
 import { TextRob20Font1MB } from "../../components/Text1MB";
 import { useZTheme } from "../../stores/useZTheme";
@@ -16,6 +16,9 @@ import { ModalDeleteVMsFromMSP } from "./ModalDeleteVMsFromMSP";
 import { useBrandMasterResources } from "../../hooks/useBrandMasterResources";
 import { AbsoluteBackDrop } from "../../components/AbsoluteBackDrop";
 import { useVmResource } from "../../hooks/useVmResource";
+import { StepOne } from "./Steps/StepOne";
+import { StepTwo } from "./Steps/StepTwo";
+import { InputLabelMsp } from "./Steps/InputLabelMsp";
 
 export const MSPRegisterPage = () => {
   const { theme, mode } = useZTheme();
@@ -32,11 +35,14 @@ export const MSPRegisterPage = () => {
     vmsToBeDeleted,
     setBrandMasterDeleted,
     setVmsToBeDeleted,
+    mspDomain,
+    setMSPDomain,
   } = useZMspRegisterPage();
   const { t } = useTranslation();
   const { isLoading } = useBrandMasterResources();
   const { isLoadingDeleteVM, deleteVM } = useVmResource();
   const [openModalUserNotCreated, setOpenModalUserNotCreated] = useState(false);
+  const [isCreateMsp, setIsCreateMsp] = useState(true);
 
   const resetAllStepStates = () => {
     setIsEditing([]);
@@ -90,8 +96,10 @@ export const MSPRegisterPage = () => {
       subtitle={
         <Box
           sx={{
-            maxWidth: "646px",
-            "@media (max-width: 660px)": { maxWidth: "136px" },
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
           }}
         >
           <SampleStepper
@@ -101,6 +109,9 @@ export const MSPRegisterPage = () => {
               t("mspRegister.stepTwoTitle"),
             ]}
           />
+          <Button variant="contained" onClick={() => setIsCreateMsp(true)}>
+            {t("mspRegister.title")}
+          </Button>
         </Box>
       }
       //  sx= estilização do componente pai
@@ -122,7 +133,81 @@ export const MSPRegisterPage = () => {
           boxSizing: "border-box",
         }}
       >
-        {
+        {isCreateMsp ? (
+          <Stack
+            sx={{
+              background: theme[mode].mainBackground,
+              borderRadius: "16px",
+              width: "100%",
+              padding: "24px",
+              boxSizing: "border-box",
+            }}
+          >
+            <Stack
+              sx={{
+                gap: "40px",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "24px",
+                }}
+              >
+                {activeStep === 1 && (
+                  <div>
+                    <TextRob16Font1S
+                      sx={{
+                        color: theme[mode].black,
+                        fontSize: "16px",
+                        fontWeight: 500,
+                        lineHeight: "24px",
+                      }}
+                    >
+                      {t("mspRegister.mspDomain")}
+                    </TextRob16Font1S>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                        marginTop: "16px",
+                      }}
+                    >
+                      <InputLabelMsp
+                        change={(value) => setMSPDomain(value)}
+                        label={t("mspRegister.domain")}
+                        required
+                        validate={mspDomain.length > 0}
+                        value={mspDomain}
+                        placeholder={t("mspRegister.mspDomainPlaceholder")}
+                      />
+                    </div>
+                  </div>
+                )}
+                <TextRob16Font1S
+                  sx={{
+                    color: theme[mode].black,
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    lineHeight: "24px",
+                  }}
+                >
+                  {activeStep === 0
+                    ? t("mspRegister.stepOneTitle")
+                    : t("mspRegister.stepTwoTitle")}
+                </TextRob16Font1S>
+              </Box>
+              {activeStep === 0 ? (
+                <StepOne setIsCreateMsp={setIsCreateMsp} />
+              ) : (
+                <StepTwo setIsCreateMsp={setIsCreateMsp} />
+              )}
+            </Stack>
+          </Stack>
+        ) : (
           <Stack
             sx={{
               background: theme[mode].mainBackground,
@@ -161,7 +246,7 @@ export const MSPRegisterPage = () => {
               <MspTable />
             </Stack>
           </Stack>
-        }
+        )}
       </Stack>
       {modalOpen !== null && (
         <Modal

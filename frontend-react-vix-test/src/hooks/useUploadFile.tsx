@@ -15,7 +15,7 @@ export const useUploadFile = () => {
 
     setIsUploading(true);
     const response = await api.post<{ objectName: string; url: string }>({
-      url: "/upload/file",
+      url: "/uploads/file",
       data: formData,
       timeout: 120000,
       auth: { ...auth, "Content-Type": "multipart/form-data" },
