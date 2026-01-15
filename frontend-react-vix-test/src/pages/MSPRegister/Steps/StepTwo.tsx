@@ -10,6 +10,8 @@ import {
 } from "../../../utils/isValidInput";
 import { LogoUpload } from "./LogoUpload";
 import { useBrandMasterResources } from "../../../hooks/useBrandMasterResources";
+import { useUserResources } from "../../../hooks/useUserResources";
+import { useZUserProfile } from "../../../stores/useZUserProfile";
 
 export const StepTwo = ({
   setIsCreateMsp,
@@ -60,6 +62,10 @@ export const StepTwo = ({
   } = useZMspRegisterPage();
 
   const { createAnewBrandMaster, editBrandMaster } = useBrandMasterResources();
+
+  const { idUser } = useZUserProfile();
+
+  const { updateUser } = useUserResources();
 
   const { t } = useTranslation();
 
@@ -135,6 +141,11 @@ export const StepTwo = ({
         district,
         isPoc,
         minConsumption,
+      });
+      console.log("response", response);
+      await updateUser({
+        idUser,
+        idBrandMaster: Number(response.brandMaster.idBrandMaster),
       });
     }
 

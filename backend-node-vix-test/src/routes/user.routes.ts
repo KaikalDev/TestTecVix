@@ -21,16 +21,20 @@ userRoutes.post(`${BASE_PATH}/`, async (req, res) => {
   await userController.register(req, res);
 });
 
-userRoutes.put(`${BASE_PATH}/`, authUser, async (req, res) => {
+userRoutes.put(`${BASE_PATH}/:idUser`, authUser, async (req, res) => {
   await userController.updateUser(req, res);
 });
 
-userRoutes.delete(`${BASE_PATH}/`, authUser, async (req, res) => {
+userRoutes.delete(`${BASE_PATH}/:idUser`, authUser, async (req, res) => {
   await userController.deleteUser(req, res);
 });
 
 userRoutes.get(`${BASE_PATH}/token/:idUser`, async (req, res) => {
   await userController.getNewToken(req, res);
+});
+
+userRoutes.get(`${BASE_PATH}/listAll`, authUser, async (req, res) => {
+  return userController.listAll(req, res);
 });
 
 export { userRoutes };

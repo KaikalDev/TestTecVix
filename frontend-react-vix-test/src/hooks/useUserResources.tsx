@@ -38,11 +38,11 @@ export const useUserResources = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
-  const updateUser = async (data: Partial<IUserDB>) => {
+  const updateUser = async (data: Partial<IUserDB>, idUserParam?: number) => {
     const auth = await getAuth();
     setIsLoading(true);
     const response = await api.put<IUserDB>({
-      url: `/user/${idUser}`,
+      url: `/user/${idUserParam || idUser}`,
       data,
       auth,
     });
@@ -76,7 +76,7 @@ export const useUserResources = () => {
     const auth = await getAuth();
     setIsLoading(true);
     const response = await api.post({
-      url: `/user/new-user`,
+      url: `/user`,
       auth,
       data: {
         ...data,

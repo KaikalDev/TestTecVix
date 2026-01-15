@@ -2,6 +2,7 @@ import { Response } from "express";
 import { CustomRequest } from "../types/custom";
 import { STATUS_CODE } from "../constants/statusCode";
 import { UserService } from "../services/UserService";
+import { user } from "@prisma/client";
 
 export class UserController {
   constructor() {}
@@ -42,6 +43,14 @@ export class UserController {
   async deleteUser(req: CustomRequest<unknown>, res: Response) {
     const { idUser } = req.params;
     const result = await this.userService.deleteUser(idUser);
+    return res.status(STATUS_CODE.OK).json(result);
+  }
+
+  async listAll(req: CustomRequest<unknown>, res: Response) {
+    const user = req.user as user;
+
+    const result = await this.userService.listAll(req.query, user);
+
     return res.status(STATUS_CODE.OK).json(result);
   }
 }
