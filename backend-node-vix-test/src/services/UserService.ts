@@ -6,6 +6,7 @@ import { TUserCreated } from "../types/validations/User/createUser";
 import { genToken } from "../utils/jwt";
 import { UserModel } from "../models/UserModel";
 import { userUpdatedSchema } from "../types/validations/User/updateUser";
+import { user } from "@prisma/client";
 
 export class UserService {
   constructor() {}
@@ -98,5 +99,22 @@ export class UserService {
     }
     const deletedVm = await this.userModel.deleteUser(idUser);
     return deletedVm;
+  }
+
+  async listAll(query: any, userLogged: user) {
+    const limit = Number(query.limit) || 10;
+    const page = Number(query.page) || 0;
+
+    const idBrandMaster = userLogged.idBrandMaster ?? null;
+
+    const result = await this.userModel.listAll({
+      limit,
+      page,
+      idBrandMaster,
+      isActive:
+        query.isActive !== undefined ? query.isActive === "true" : undefined,
+    });
+
+    return result;
   }
 }

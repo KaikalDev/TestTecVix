@@ -1,16 +1,27 @@
 export interface IUserResponse {
-  idUser: number;
-  idBrandMaster: 1;
-  createdAt: string | Date;
-  deletedAt: string | Date | null;
-  email: string | null;
-  isActive: boolean;
-  lastLoginDate: string | Date;
-  profileImgUrl: string | null;
-  role: "admin" | "manager" | "member";
-  socketId: null | string;
-  updatedAt: string | Date;
+  idUser: string;
   username: string;
+  fullName?: string | null;
+  userPhoneNumber?: string | null;
+  department?: string | null;
+  field?: string | null;
+  contractDate?: string | null;
+
+  email: string;
+  profileImgUrl?: string | null;
+
+  role: "admin" | "manager" | "member";
+  idBrandMaster?: number | null;
+  isActive?: boolean | null;
+
+  lastLoginDate?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+
+  brandMaster?: {
+    brandName: string;
+    brandLogo?: string | null;
+  } | null;
 }
 
 export interface IPincodeInfos {

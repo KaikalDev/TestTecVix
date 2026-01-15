@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 export interface IUserDB {
-  idUser: number;
+  idUser: string;
   idBrandMaster: number | null;
   username: string;
   email: string;
@@ -38,11 +38,11 @@ export const useUserResources = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
-  const updateUser = async (data: Partial<IUserDB>) => {
+  const updateUser = async (data: Partial<IUserDB>, idUserParam?: string) => {
     const auth = await getAuth();
     setIsLoading(true);
     const response = await api.put<IUserDB>({
-      url: `/user/${idUser}`,
+      url: `/user/${idUserParam || idUser}`,
       data,
       auth,
     });
@@ -52,15 +52,17 @@ export const useUserResources = () => {
       return null;
     }
 
-    setUser({
-      profileImgUrl: response.data.profileImgUrl,
-      username: response.data.username,
-      userEmail: response.data.email,
-      idBrand: response.data.idBrandMaster,
+    if (!idUserParam) {
+      setUser({
+        profileImgUrl: response.data.profileImgUrl,
+        username: response.data.username,
+        userEmail: response.data.email,
+        idBrand: response.data.idBrandMaster,
 
-      role: response.data.role,
-      userPhoneNumber: response.data.userPhoneNumber,
-    });
+        role: response.data.role,
+        userPhoneNumber: response.data.userPhoneNumber,
+      });
+    }
 
     return response.data;
   };
@@ -76,7 +78,7 @@ export const useUserResources = () => {
     const auth = await getAuth();
     setIsLoading(true);
     const response = await api.post({
-      url: `/user/new-user`,
+      url: `/user`,
       auth,
       data: {
         ...data,
