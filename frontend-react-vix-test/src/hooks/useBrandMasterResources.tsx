@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useZBrandInfo } from "../stores/useZBrandStore";
 import { useUploadFile } from "./useUploadFile";
 import { IBrandMasterBasicInfo } from "../types/BrandMasterTypes";
-
+import { useZMspRegisterPage } from "../stores/useZMspRegisterPage";
 
 interface IUpdateBrandMaster {
   brandName?: string;
@@ -135,6 +135,7 @@ export interface INewMSPResponse {
 
 export const useBrandMasterResources = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { isEditing } = useZMspRegisterPage();
   const { getAuth } = useAuth();
   const { role, idBrand } = useZUserProfile();
   const { t } = useTranslation();
@@ -273,7 +274,7 @@ export const useBrandMasterResources = () => {
         idBrandTheme: 1,
         isActive: true,
         brandLogo: data.brandLogo,
-        domain: undefined,
+        domain: data.mspDomain,
         setorName: data.sector,
         fieldName: undefined,
         location: data.locality,
@@ -347,12 +348,12 @@ export const useBrandMasterResources = () => {
     return response.data;
   };
 
-  const editBrandMaster = async (
-    brandMasterId: number | string,
-    data: IUpdateBrandMaster,
-  ) => {
+  const editBrandMaster = async (data: IUpdateBrandMaster) => {
+    const brandMasterId = isEditing[0];
     if (!brandMasterId) return null;
+
     if (!data) return null;
+
     if (role !== "admin" && role !== "manager") {
       toast.error(t("generic.errorOlnlyAdmin"));
       return;
@@ -371,6 +372,7 @@ export const useBrandMasterResources = () => {
         city: data.city,
         cep: data.cep,
         street: data.street,
+        domain: data.domain,
         placeNumber: data.placeNumber,
         smsContact: data.smsContact,
         brandLogo: data.brandLogo,

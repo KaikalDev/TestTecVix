@@ -2,11 +2,9 @@ import { z } from "zod";
 
 export const brandMasterSchema = z.object({
   brandName: z.string().nullable().optional(),
-  idBrandTheme: z.number().int().nullable().optional(),
-  isActive: z.boolean().default(false).optional(),
+  isActive: z.boolean().optional(),
   brandLogo: z.string().nullable().optional(),
   domain: z.string().nullable().optional(),
-  contract: z.string().nullable().optional(),
   setorName: z.string().nullable().optional(),
   fieldName: z.string().nullable().optional(),
   location: z.string().nullable().optional(),
@@ -22,18 +20,13 @@ export const brandMasterSchema = z.object({
   cityCode: z.number().nullable().optional(),
   district: z.string().nullable().optional(),
   stripeUserId: z.string().nullable().optional(),
-  isStripeActive: z.boolean().default(false).optional(),
-  isPoc: z.boolean().default(false).optional(),
-  discountRate: z.number().min(0).optional(),
-  minConsumption: z.number().min(0).optional(),
+  isPoc: z.boolean().optional(),
+  contract: z.string().nullable().optional(),
   contractAt: z.date().nullable().optional(),
   pocOpenedAt: z.date().nullable().optional(),
   manual: z.string().nullable().optional(),
   termsOfUse: z.string().nullable().optional(),
   privacyPolicy: z.string().nullable().optional(),
-  retailPercentageDefault: z.number().min(0).optional(),
-  hasSelfRegister: z.boolean().optional(),
-  hasPrepaid: z.boolean().optional(),
 });
 
 export type TBrandMaster = z.infer<typeof brandMasterSchema>;
