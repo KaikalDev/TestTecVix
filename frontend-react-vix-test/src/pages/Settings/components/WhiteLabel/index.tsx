@@ -3,6 +3,8 @@ import { useZTheme } from "../../../../stores/useZTheme";
 import { availableThemes, ThemeNames } from "../../themes";
 import { Stack } from "@mui/material";
 import { LeftCard } from "./LeftCard";
+import { useZBrandInfo } from "../../../../stores/useZBrandStore";
+import { TextRob16Font1S } from "../../../../components/Text1S";
 
 export const WhiteLabel = () => {
   const { themeName, setTheme, version, themeNameDefault } = useZTheme();
@@ -11,6 +13,7 @@ export const WhiteLabel = () => {
     ? themeName
     : "default";
   const [colorSelected] = useState<ThemeNames>(initialColor as ThemeNames);
+  const { idBrand } = useZBrandInfo();
 
   useEffect(() => {
     if (colorSelected !== themeName) {
@@ -23,6 +26,8 @@ export const WhiteLabel = () => {
       });
     }
   }, [colorSelected]);
+
+  if (!idBrand) return <TextRob16Font1S>MSP não criada</TextRob16Font1S>;
 
   return (
     <Stack

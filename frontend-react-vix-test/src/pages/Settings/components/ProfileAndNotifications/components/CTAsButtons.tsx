@@ -3,15 +3,42 @@ import { useTranslation } from "react-i18next";
 import { useZTheme } from "../../../../../stores/useZTheme";
 import { TextRob16FontL } from "../../../../../components/TextL";
 import { toast } from "react-toastify";
+import { useZFormProfileNotifications } from "../../../../../stores/useZFormProfileNotifications";
+import { useZUserProfile } from "../../../../../stores/useZUserProfile";
+import { useUserResources } from "../../../../../hooks/useUserResources";
 
 export const CTAsButtons = () => {
   const { t } = useTranslation();
   const { theme, mode } = useZTheme();
+  const {
+    userEmail: userEmailForm,
+    userName,
+    userPhone,
+    password,
+    confirmPassword,
+    fullNameForm,
+    setFormProfileNotifications,
+  } = useZFormProfileNotifications();
+  const { imageUrl } = useZUserProfile();
+  const { updateUser } = useUserResources();
 
   const handleSave = async () => {
-    const allValid = true;
+    const allValid =
+      !userEmailForm.errorMessage &&
+      !userName.errorMessage &&
+      !userPhone.errorMessage &&
+      !password.errorMessage &&
+      !confirmPassword.errorMessage &&
+      !fullNameForm.errorMessage;
     if (!allValid) return toast.error(t("profileAndNotifications.errorForm"));
-    const r = true;
+    const r = await updateUser({
+      profileImgUrl: imageUrl,
+      email: userEmailForm.value,
+      username: userName.value,
+      phone: userPhone.value,
+      fullName: fullNameForm.value,
+      password: password.value,
+    });
     if (r) return toast.success(t("generic.dataSavesuccess"));
     return;
   };

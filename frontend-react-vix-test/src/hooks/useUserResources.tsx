@@ -13,6 +13,8 @@ export interface IUserDB {
   userPhoneNumber: string | null;
   profileImgUrl: null | string;
   role: "admin" | "manager" | "member";
+  phone: string;
+  password: string;
   isActive: boolean;
   socketId: string | null;
   createdAt: string | Date;
