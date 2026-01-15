@@ -37,12 +37,13 @@ export const MSPRegisterPage = () => {
     setVmsToBeDeleted,
     mspDomain,
     setMSPDomain,
+    enterOnEditing,
   } = useZMspRegisterPage();
   const { t } = useTranslation();
   const { isLoading } = useBrandMasterResources();
   const { isLoadingDeleteVM, deleteVM } = useVmResource();
   const [openModalUserNotCreated, setOpenModalUserNotCreated] = useState(false);
-  const [isCreateMsp, setIsCreateMsp] = useState(true);
+  const [isCreateMsp, setIsCreateMsp] = useState(false);
 
   const resetAllStepStates = () => {
     setIsEditing([]);
@@ -133,7 +134,7 @@ export const MSPRegisterPage = () => {
           boxSizing: "border-box",
         }}
       >
-        {isCreateMsp ? (
+        {isCreateMsp || enterOnEditing ? (
           <Stack
             sx={{
               background: theme[mode].mainBackground,

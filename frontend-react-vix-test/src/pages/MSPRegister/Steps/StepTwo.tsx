@@ -46,9 +46,20 @@ export const StepTwo = ({
     isPoc,
     minConsumption,
     brandLogoUrl,
+    enterOnEditing,
+    setCompanyName,
+    setCnpj,
+    setLocality,
+    setPhone,
+    setSector,
+    setContactEmail,
+    setMinConsumption,
+    setDiscountRate,
+    setIsPoc,
+    setEnterOnEditing,
   } = useZMspRegisterPage();
 
-  const { createAnewBrandMaster } = useBrandMasterResources();
+  const { createAnewBrandMaster, editBrandMaster } = useBrandMasterResources();
 
   const { t } = useTranslation();
 
@@ -60,38 +71,79 @@ export const StepTwo = ({
     setAdmPhone("");
     setPosition("");
     setAdmPassword("");
+    setCompanyName("");
+    setCnpj("");
+    setLocality("");
+    setPhone("");
+    setSector("");
+    setContactEmail("");
+    setMinConsumption(0);
+    setDiscountRate(0);
+    setIsPoc(false);
   };
 
-  const handleSubmit = () => {
-    const newBrand = createAnewBrandMaster({
-      admName,
-      admEmail,
-      admPhone,
-      admPassword,
-      brandLogo: brandLogoUrl,
-      cep,
-      city,
-      cnpj,
-      companyName,
-      contactEmail,
-      countryState,
-      locality,
-      mspDomain,
-      phone,
-      street,
-      sector,
-      streetNumber,
-      cityCode: cityCode ? Number(cityCode) : undefined,
-      position: "admin",
-      discountRate,
-      district,
-      isPoc,
-      minConsumption,
-    });
-    if (newBrand) {
-      setIsCreateMsp(false);
-      setActiveStep(0);
+  const handleSubmit = async () => {
+    let response;
+
+    if (enterOnEditing) {
+      response = await editBrandMaster({
+        admName,
+        admEmail,
+        admPhone,
+        admPassword,
+        brandLogo: brandLogoUrl,
+        cep,
+        city,
+        cnpj,
+        brandName: companyName,
+        emailContact: contactEmail,
+        state: countryState,
+        location: locality,
+        mspDomain,
+        placeNumber: phone,
+        street,
+        setorName: sector,
+        domain: mspDomain,
+        minConsumption,
+        discountRate,
+        district,
+        isPoc,
+        cityCode: cityCode ? Number(cityCode) : undefined,
+      });
+    } else {
+      response = await createAnewBrandMaster({
+        admName,
+        admEmail,
+        admPhone,
+        admPassword,
+        brandLogo: brandLogoUrl,
+        cep,
+        city,
+        cnpj,
+        companyName,
+        contactEmail,
+        countryState,
+        locality,
+        mspDomain,
+        phone,
+        street,
+        sector,
+        streetNumber,
+        cityCode: cityCode ? Number(cityCode) : undefined,
+        position: "admin",
+        discountRate,
+        district,
+        isPoc,
+        minConsumption,
+      });
     }
+
+    if (!response) return;
+
+    setEnterOnEditing(false);
+    setIsCreateMsp(false);
+    setActiveStep(0);
+    handleCancel();
   };
 
   return (
@@ -116,7 +168,7 @@ export const StepTwo = ({
           required
           value={admName}
           validate={isNotEmpty(admName)}
-          change={setAdmName}
+          change={(value) => setAdmName(value)}
           placeholder={t("mspRegister.completeNamePlaceholder")}
         />
 
@@ -126,7 +178,7 @@ export const StepTwo = ({
           format="Email"
           validate={isValidEmail(admEmail)}
           value={admEmail}
-          change={setAdmEmail}
+          change={(value) => setAdmEmail(value)}
           placeholder={t("mspRegister.emailPlaceholder")}
         />
       </Stack>
@@ -143,7 +195,7 @@ export const StepTwo = ({
           required
           validate={isNotEmpty(admPhone) ? isValidPhone(admPhone) : true}
           value={admPhone}
-          change={setAdmPhone}
+          change={(value) => setAdmPhone(value)}
           placeholder="(00) 00000-0000"
           format="Telefone"
         />
@@ -163,7 +215,7 @@ export const StepTwo = ({
           format="Password"
           value={admPassword}
           validate={isNotEmpty(admPassword)}
-          change={setAdmPassword}
+          change={(value) => setAdmPassword(value)}
           placeholder={t("mspRegister.initialPasswordPlaceholder")}
         />
 
@@ -178,7 +230,7 @@ export const StepTwo = ({
 
       <hr />
 
-      <LogoUpload />
+      <LogoUpload url={brandLogoUrl} />
 
       <Stack
         sx={{

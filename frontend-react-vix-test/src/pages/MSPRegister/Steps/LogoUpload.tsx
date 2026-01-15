@@ -11,11 +11,11 @@ import { TextRob12Font2Xs } from "../../../components/Text2Xs";
 import { CircleIcon } from "../../../icons/CircleIcon";
 import { useZMspRegisterPage } from "../../../stores/useZMspRegisterPage";
 
-export const LogoUpload = () => {
+export const LogoUpload = ({ url }: { url: string }) => {
   const { theme, mode } = useZTheme();
   const { t } = useTranslation();
   const { handleUpload, isUploading } = useUploadFile();
-  const [uploadedFile, setUploadedFile] = useState<string | null>("");
+  const [uploadedFile, setUploadedFile] = useState<string | null>(url || "");
   const { setBrandLogo } = useZMspRegisterPage();
 
   const onDrop = async (acceptedFiles: File[]) => {

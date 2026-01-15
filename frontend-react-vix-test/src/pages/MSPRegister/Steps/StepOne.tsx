@@ -37,11 +37,13 @@ export const StepOne = ({
     isPoc,
     setIsPoc,
     setActiveStep,
+    setEnterOnEditing,
   } = useZMspRegisterPage();
   const { t } = useTranslation();
 
   const handleCancel = () => {
     setIsCreateMsp(false);
+    setEnterOnEditing(false);
     setActiveStep(0);
     setCompanyName("");
     setCnpj("");
