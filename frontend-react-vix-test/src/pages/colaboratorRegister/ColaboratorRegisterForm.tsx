@@ -41,8 +41,8 @@ export const ColaboratorRegisterForm = () => {
     setStatus,
     idBrandMaster,
     setIdBrandMaster,
-    isEditing,
-    setIsEditing,
+    idUser,
+    setIdUser,
   } = useZColaboratorRegister();
 
   const { createUserByManager, updateUser } = useUserResources();
@@ -78,18 +78,20 @@ export const ColaboratorRegisterForm = () => {
   };
 
   const handleEdit = async () => {
-    await updateUser(
-      {
-        idUser: isEditing[0],
-        email: email,
-        fullName: colaboratorName,
-        role: permission as "admin" | "manager" | "member",
-        username: username,
-        userPhoneNumber: phone,
-      },
-      isEditing[0],
-    );
-    setIsEditing([]);
+    if (idUser !== null) {
+      await updateUser(
+        {
+          idUser: idUser,
+          email: email,
+          fullName: colaboratorName,
+          role: permission as "admin" | "manager" | "member",
+          username: username,
+          userPhoneNumber: phone,
+        },
+        idUser,
+      );
+    }
+    setIdUser(null);
     handleClearForm();
     await fetchListUsers();
   };
@@ -252,7 +254,9 @@ export const ColaboratorRegisterForm = () => {
             }}
           >
             <Button
-              onClick={isEditing ? handleEdit : handleCreateColaborator}
+              onClick={
+                idUser !== null ? handleEdit : handleCreateColaborator
+              }
               variant="contained"
             >
               {t("colaboratorRegister.save")}

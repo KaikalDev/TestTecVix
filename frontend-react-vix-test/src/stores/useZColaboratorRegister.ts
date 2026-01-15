@@ -4,7 +4,7 @@ import {
 } from "../types/BrandMasterTypes";
 
 export type Colaborator = {
-  idUser: number;
+  idUser: string;
   name: string;
   username?: string;
   email: string;
@@ -20,7 +20,7 @@ export type Colaborator = {
 };
 
 export interface ColaboratorRegisterInputs {
-  idUser?: number | null;
+  idUser?: string | null;
   colaboratorName: string;
   email: string;
   phone: string;
@@ -90,7 +90,7 @@ const INITIAL_STATE: IColaboratorRegister = {
 
 interface IColaboratorRegisterState extends IColaboratorRegister {
   resetInputs: () => void;
-  setIdUser: (id: number) => void;
+  setIdUser: (id: string) => void;
   setColaboratorName: (colaboratorName: string) => void;
   setEmail: (email: string) => void;
   setPhone: (phone: string) => void;
@@ -142,7 +142,7 @@ export const useZColaboratorRegister = create<IColaboratorRegisterState>(
       set((state) => ({ ...state, colaboratorNameFilter })),
     setCompanyNameFilter: (companyNameFilter: string) =>
       set((state) => ({ ...state, companyNameFilter })),
-    setIdUser: (id: number) => set((state) => ({ ...state, idUser: id })),
+    setIdUser: (id: string) => set((state) => ({ ...state, idUser: id })),
     setErrorMessage: (errorMessage: boolean) =>
       set((state) => ({ ...state, errorMessage })),
     setIdBrandMaster: (idBrandMaster: number) =>

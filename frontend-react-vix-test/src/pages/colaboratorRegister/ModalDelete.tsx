@@ -36,7 +36,7 @@ export const ModalDelete = ({
 
   const onDelete = async () => {
     const response = await updateUser({
-      idUser: Number(userToDelete.idUser),
+      idUser: userToDelete.idUser,
       isActive: false,
     });
     resetAll();

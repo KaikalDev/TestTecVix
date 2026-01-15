@@ -34,6 +34,7 @@ export const ColaboratorTable = () => {
     setStatus,
     setIdBrandMaster,
     setIsEditing,
+    setIdUser,
     colaboratorNameFilter,
     companyNameFilter,
     isEditing,
@@ -58,7 +59,7 @@ export const ColaboratorTable = () => {
     );
     setStatus(user.isActive ? "active" : "inactive");
     setIdBrandMaster(user.idBrandMaster || null);
-    setIsEditing([Number(user.idUser)]);
+    setIdUser(user.idUser);
   };
   return (
     <Stack
