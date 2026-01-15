@@ -7,6 +7,8 @@ import { TextRob14Font1Xs } from "../../../../components/Text1Xs";
 import { useZBrandInfo } from "../../../../stores/useZBrandStore";
 import { useBrandMasterResources } from "../../../../hooks/useBrandMasterResources";
 import { AbsoluteBackDrop } from "../../../../components/AbsoluteBackDrop";
+import { useState } from "react";
+import { useUserResources } from "../../../../hooks/useUserResources";
 
 interface IWhiteLabelChildProps {
   theme: {
@@ -24,37 +26,26 @@ export const LeftCardDomain = ({ theme }: IWhiteLabelChildProps) => {
     setBrandInfo,
     domain: domainName,
   } = useZBrandInfo();
-  // const [domain, setDomain] = useState<string>(domainName);
-  // const { updateDomain } = useBrandMasterResources();
+  const [domain, setDomain] = useState<string>(domainName);
+  const { updateDomain } = useBrandMasterResources();
+  const { updateUser } = useUserResources();
   const { updateBrandMaster, isLoading } = useBrandMasterResources();
-
-  // const handleSave = async () => {
-  //   const response = await updateBrandMaster({
-  //     domain,
-  //     brandLogo: brandObjectName || undefined,
-  //   });
-  //   if (!response) return;
-  //   if (domain !== domainName) {
-  //     const r = await updateDomain(domain);
-  //     if (!r) return;
-  //   }
-  //   setBrandInfo({
-  //     ...(brandLogoTemp
-  //       ? { brandLogo: brandLogoTemp, brandLogoTemp: "", brandObjectName: "" }
-  //       : {}),
-  //     domain,
-  //   });
-  // };
 
   const handleSave = async () => {
     const response = await updateBrandMaster({
+      domain,
       brandLogo: brandObjectName || undefined,
     });
     if (!response) return;
+    if (domain !== domainName) {
+      const r = await updateDomain(domain);
+      if (!r) return;
+    }
     setBrandInfo({
       ...(brandLogoTemp
         ? { brandLogo: brandLogoTemp, brandLogoTemp: "", brandObjectName: "" }
         : {}),
+      domain,
     });
   };
 
